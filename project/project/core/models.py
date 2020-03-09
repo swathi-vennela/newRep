@@ -78,9 +78,10 @@ class OrderItem(models.Model):
         return self.get_total_item_price() - self.get_total_discount_item_price()
 
     def get_final_price(self):
-        if self.item.discount_price:
-            return self.get_total_discount_item_price()
-        return self.get_total_item_price()
+    	if self.item.discount_price:
+    		return self.get_total_discount_item_price()
+    	return self.get_total_item_price()
+
 
 
 class Order(models.Model):
@@ -97,6 +98,6 @@ class Order(models.Model):
         total = 0
         for order_item in self.items.all():
             total += order_item.get_final_price()
-        if self.coupon:
-            total -= self.coupon.amount
+        # if self.coupon:
+        #     total -= self.coupon.amount
         return total
