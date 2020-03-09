@@ -1,2 +1,0 @@
-# newRep
-sample repository
