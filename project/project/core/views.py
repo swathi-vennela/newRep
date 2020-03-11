@@ -9,10 +9,18 @@ from .models import Item, OrderItem, Order
 from django.contrib.auth.models import User 
 from django.views.generic import ListView, View, DetailView
 from django.utils import timezone
+from .forms import FilterForm
+import logging
+
+# def home(request):
+# 	return render(request, 'core/order_summary.html')  #we pass the dictionary containing info about a list of post objects where each element of the list corresponds to each user's post into the render function
+# 	#passing the context dictionary into render facilitates accessing the posts in home.html template.
 
 def home(request):
-	return render(request, 'core/order_summary.html')  #we pass the dictionary containing info about a list of post objects where each element of the list corresponds to each user's post into the render function
-	#passing the context dictionary into render facilitates accessing the posts in home.html template.
+	context = {
+		'items' : Item.objects.all()
+	}
+	return render(request, 'core/home.html', context)
 
 
 class ItemListView(ListView):
@@ -32,42 +40,6 @@ class OrderSummaryView(LoginRequiredMixin, View):
 		except ObjectDoesNotExist:
 			messages.info(self.request, "You do not have an active order")
 			return redirect("/")
-		
-
-class CheckoutView(View):
-    def get(self, *args, **kwargs):
-        try:
-            order = Order.objects.get(user=self.request.user, ordered=False)
-            form = CheckoutForm()
-            context = {
-                'form': form,
-                'couponform': CouponForm(),
-                'order': order,
-                'DISPLAY_COUPON_FORM': True
-            }
-
-            shipping_address_qs = Address.objects.filter(
-                user=self.request.user,
-                address_type='S',
-                default=True
-            )
-            if shipping_address_qs.exists():
-                context.update(
-                    {'default_shipping_address': shipping_address_qs[0]})
-
-            billing_address_qs = Address.objects.filter(
-                user=self.request.user,
-                address_type='B',
-                default=True
-            )
-            if billing_address_qs.exists():
-                context.update(
-                    {'default_billing_address': billing_address_qs[0]})
-
-            return render(self.request, "checkout.html", context)
-        except ObjectDoesNotExist:
-            messages.info(self.request, "You do not have an active order")
-            return redirect("core:checkout")
 
 class ItemDetailView(DetailView):
 	model = Item
@@ -147,6 +119,24 @@ def remove_single_item_from_cart(request, slug):
 		messages.info(request, "You do not have an active cart")
 		return redirect("core:product", slug=slug)
 	return redirect("core:product", slug=slug)
+
+
+def filterItems(request):
+
+	if request.method == 'POST':
+		fAtt = FilterForm(request.POST)
+
+		if fAtt.is_valid():
+			print ('Filtering the items based on ' ,fAtt.cleaned_data.get('filterAtt'))
+			filter_qs = Item.objects.filter(category=fAtt.cleaned_data.get('filterAtt'))
+			print(filter_qs)
+			return render(request, 'core/home.html', context = {'items' : Item.objects.filter(category=fAtt.cleaned_data.get('filterAtt'))})
+
+	else:
+		fAtt = FilterForm()
+
+	return render(request, 'core/filter.html',{'form':fAtt})
+
 
 
 

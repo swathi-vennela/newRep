@@ -1,4 +1,5 @@
 {% load static %}
+{% load crispy_forms_tags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,6 +10,11 @@
   <title>Home Page</title>    
 </head>
 <body>
+    {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert">{{ message }}</div>
+        {% endfor %}
+  {% endif %}
     <!--Navigation Bar Starts-->
   <header class="site-header">
     <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
@@ -45,26 +51,19 @@
     </header>
     <!--Nav Bar ends -->
     <br> <br> <br> <br> <br> <br>
-  <div class="container">
-    <div class="row">
-      {% for object in items %}
-      <div class="col-md-4 col-sm-4 col-lg-4 m-4">
-              <div class="card">
-                <img src="{{object.image.url}}" class="card-img-top" alt="{{ product.name }}" height="300" width="300">
-                      <div class="card-body">
-                        <h5 class="card-title"> {{ object.title }}</h5>
-                        <a href="{{object.get_absolute_url}} ">View Details</a>
-                        <p class="card-text">{{ object.price }}</p>
-                        <span class="badge purple mr-1"> {{object.category}} </span>
-                      </div>
-                  <div class='card-footer text-center'>
-                  <a href="#" class="btn btn-success">Add to Cart</a>
-                  <a href="#" class="btn btn-danger">Remove from Cart</a>
-                  </div>
-               </div>
+    <!DOCTYPE html>
+
+<h2>Filtering</h2>
+      <form method="POST">
+        {% csrf_token %}
+        <fieldset class="form-group">
+          <legend class="border-bottom mb-4">Filter form</legend>
+          {{ form|crispy }}        <!--Prints out the form that we've passed. as_p will render our form in paragraph tags-->
+        </fieldset>
+        <div class="form-group">
+          <button class="btn btn-outline-info" type="submit">Filter</button>
         </div>
-      {% endfor %}
-  </div>
-  </div>
+      </form>
+
 </body>
 </html>
