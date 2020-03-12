@@ -16,18 +16,19 @@ import logging
 # 	return render(request, 'core/order_summary.html')  #we pass the dictionary containing info about a list of post objects where each element of the list corresponds to each user's post into the render function
 # 	#passing the context dictionary into render facilitates accessing the posts in home.html template.
 
+
 # def home(request):
 # 	if request.method == 'POST':
 # 		filterAtt = request.POST['filter1']
 # 		if filterAtt:
 # 			filter_qs = Item.objects.filter(category=filterAtt)
-# 			return render(request, 'core/home.html',context={'items' : filter_qs})
+# 			if filter_qs:
+# 				return render(request, 'core/home.html',context={'items' : filter_qs})
 
 # 		filterAtt = request.POST['filter2']
 # 		if filterAtt:
 # 			if filterAtt == "lte100":
 # 				filter_qs = Item.objects.filter(price__range=(0,100))
-# 				print(filter_qs)
 # 				return render(request, 'core/home.html',context={'items' : filter_qs})
 # 			elif filterAtt == "100to200":
 # 				filter_qs = Item.objects.filter(price__range=(101,199))
@@ -36,31 +37,6 @@ import logging
 # 				filter_qs = Item.objects.filter(price__range=(200,1000))
 # 				return render(request, 'core/home.html',context={'items' : filter_qs})
 
-# 	return render(request, 'core/home.html', context={'items' : Item.objects.all()})
-
-# def home(request):
-# 	if request.method == 'POST':
-# 		print(request.body)
-# 		filterAtt = request.POST['filter1']
-# 		if filterAtt:
-# 			filter_qs = Item.objects.filter(category=filterAtt)
-# 			if filter_qs:
-# 				return render(request, 'core/home.html',context={'items' : filter_qs})
-
-# 		filterAtt2 = request.POST['filter1']
-# 		#print(request.POST.items())
-# 		if filterAtt2:
-# 			if filterAtt2 == "lte100":
-# 				filter_qs2 = Item.objects.filter(price__range=(0,100))
-# 				return render(request, 'core/home.html',context={'items' : filter_qs2})
-# 			elif filterAtt2 == "100to200":
-# 				filter_qs2 = Item.objects.filter(price__range=(101,199))
-# 				return render(request, 'core/home.html',context={'items' : filter_qs2})
-# 			elif filterAtt2 == "gte200":
-# 				filter_qs2 = Item.objects.filter(price__range=(200,1000))
-# 				return render(request, 'core/home.html',context={'items' : filter_qs2})
-
-# 	return render(request, 'core/home.html', context={'items' : Item.objects.all()})
 
 def home(request):
 	if request.method == 'POST':
@@ -81,6 +57,15 @@ def home(request):
 			elif filterAtt == "gte200":
 				filter_qs = Item.objects.filter(price__range=(200,1000))
 				return render(request, 'core/home.html',context={'items' : filter_qs})
+
+		sortAtt = request.POST['sort']
+		if sortAtt:
+			if sortAtt == "priceAsc":
+				sorted_qs = Item.objects.order_by('price')
+				return render(request, 'core/home.html',context={'items' : sorted_qs})
+			elif sortAtt == "priceDesc":
+				sorted_qs = Item.objects.order_by('-price')
+				return render(request, 'core/home.html',context={'items' : sorted_qs})
 
 	return render(request, 'core/home.html', context={'items' : Item.objects.all()})
 
