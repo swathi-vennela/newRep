@@ -7,6 +7,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href=" {% static 'core/dropdown.css' %} ">
+
+
+
   <title>Home Page</title>    
 </head>
 <body>
@@ -51,19 +55,20 @@
     </header>
     <!--Nav Bar ends -->
     <br> <br> <br> <br> <br> <br>
-    <!DOCTYPE html>
+ 
+    <form method="POST">
+      {% csrf_token %}
+      <label for="filters">Choose a filter:</label>
 
-<h2>Filtering</h2>
-      <form method="POST">
-        {% csrf_token %}
-        <fieldset class="form-group">
-          <legend class="border-bottom mb-4">Filter form</legend>
-          {{ form|crispy }}        <!--Prints out the form that we've passed. as_p will render our form in paragraph tags-->
-        </fieldset>
-        <div class="form-group">
-          <button class="btn btn-outline-info" type="submit">Filter</button>
-        </div>
-      </form>
+      <select id="filters" name="filters" onchange="this.form.submit()">
+        <option selected="selected">  </option>
+        <option value="C">Carbohydrates</option>
+        <option value="P">Proteins</option>
+        <option value="F">Fats</option>
+      </select>
+
+    </form> 
+
 
 </body>
 </html>

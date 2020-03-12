@@ -9,6 +9,10 @@
   <title>Home Page</title>    
 </head>
 <body>
+
+
+
+
     <!--Navigation Bar Starts-->
   <header class="site-header">
     <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
@@ -19,6 +23,11 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarToggle">
         <div class="navbar-nav mr-auto">
+          <a class="nav-item nav-link" href="{% url 'core:home' %}">Home  </a>
+          <a class="nav-item nav-link" href="#">About </a>
+        </div>
+      <div class="collapse navbar-collapse" id="navbarToggle">
+        <div class="navbar-nav mr-auto">
           <a href="{% url 'core:home' %} ">Home</a>
           <a  href="#">About</a>
         </div>
@@ -27,25 +36,85 @@
 
           {% if user.is_authenticated %}
                 <a class="nav-item nav-link" href="#">New Post</a>
-                <a  href=" {% url 'logout' %} ">Logout</a>
-                <a  href=" {% url 'core:order-summary' %} ">Cart</a>
-                <a  href="{% url 'profile' %} ">Profile</a>
+                <a  href=" {% url 'logout' %} ">Logout   </a>
+                <a  href=" {% url 'core:order-summary' %} ">Cart  </a>
+                <a  href="{% url 'profile' %} ">Profile  </a>
+                <a href="{% url 'core:filter' %}">Filter </a>
 
           {% else %}
 
                 <a href=" {% url 'login' %} ">Login</a>
-                <a href=" {% url 'register' %} ">Register</a>
+                <a href=" filter/{% url 'register' %} ">Register</a>
 
           {% endif %}
+
           
         </div>
+
       </div>
+
     </div>
     </nav> 
     </header>
-    <!--Nav Bar ends -->
+    <!--Nav Bar ends -- >
+      <!-- onchange="this.form.submit()" -->
     <br> <br> <br> <br> <br> <br>
+
+<!--       <form method="POST">
+      {% csrf_token %}
+      <label for="filters">Choose a filter:</label>
+
+      <select id="filter1" name="filter1" onchange="this.form.submit()">
+      <option selected="selected"> Nutrient </option>
+      <option value="C">Carbohydrates</option>
+      <option value="P">Proteins</option>
+      <option value="F">Fats</option>
+       </select>
+
+      <select id="filter2" name="filter2" onchange="this.form.submit()" > 
+        <option selected="selected"> Price </option>
+        <option value="lte100">below 100</option>
+        <option value="100to200">[100-200]</option>
+        <option value="gte200">above 200</option>
+      </select>
+
+    </form> -->
+
+    <form method="POST">
+      {% csrf_token %}
+      <label for="filters">Choose a filter:</label>
+
+      <select id="filter1" name="filter1" onchange="this.form.submit()">
+      <option selected="selected"> Nutrient </option>
+      <option value="C">Carbohydrates</option>
+      <option value="P">Proteins</option>
+      <option value="F">Fats</option>
+       </select>
+
+      <select id="filter2" name="filter2" onchange="this.form.submit()" > 
+        <option selected="selected"> Price </option>
+        <option value="lte100">below 100</option>
+        <option value="100to200">[100-200]</option>
+        <option value="gte200">above 200</option>
+      </select>
+
+    </form>
+
+<!--       <div>
+      <label for="minprice">Min Price</label>
+      <input id="minprice" name="minprice" size="5" type="text" />
+
+      <label for="maxprice">Max Price</label>
+      <input id="maxprice" name="maxprice" size="5" type="text" />
+      <input type="button" id="submit_form" value="Submit">
+      </div> -->
+
+
+
+ 
+
   <div class="container">
+
     <div class="row">
       {% for object in items %}
       <div class="col-md-4 col-sm-4 col-lg-4 m-4">
@@ -64,7 +133,11 @@
                </div>
         </div>
       {% endfor %}
+
+
+
   </div>
   </div>
+
 </body>
 </html>
